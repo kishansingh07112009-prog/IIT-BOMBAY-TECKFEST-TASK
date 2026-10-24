@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EquiSplit — Smart, Exact Bill Splitting</title>
+    <meta
+      name="description"
+      content="Split a bill with friends in seconds. EquiSplit calculates exact shares, keeps every paise accounted for, and runs right in your browser."
+    />
+    <meta property="og:title" content="EquiSplit — Smart, Exact Bill Splitting" />
+    <meta
+      property="og:description"
+      content="Split a bill with friends in seconds, with exact shares and no rounding errors."
+    />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Background Tech Glow Elements -->
+    <div class="bg-glow bg-glow-1" aria-hidden="true"></div>
+    <div class="bg-glow bg-glow-2" aria-hidden="true"></div>
+
+    <div class="app-wrapper">
+      <!-- Header -->
+      <header class="app-header">
+        <div class="header-inner">
+          <div class="brand">
+            <div class="brand-icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 3h5v5"></path>
+                <path d="M8 21H3v-5"></path>
+                <path d="M21 3l-7.5 7.5"></path>
+                <path d="M3 21l7.5-7.5"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </div>
+            <div class="brand-text">
+              <h1 class="brand-title">Equi<span>Split</span></h1>
+              <p class="brand-tagline">SMART BILL SPLITTING</p>
+            </div>
+          </div>
+          <nav class="site-nav" aria-label="Main navigation">
+            <a class="site-nav-link active" href="#calculator" aria-current="location">Split a bill</a>
+            <a class="site-nav-link" href="#how-it-works">How it works</a>
+          </nav>
+          <div class="header-actions">
+            <label for="currencySelect" class="sr-only">Select Currency</label>
+            <div class="select-wrapper">
+              <select id="currencySelect" aria-label="Currency" class="currency-dropdown">
+                <option value="₹" selected>₹ INR (Paise)</option>
+                <option value="$">$ USD (Cents)</option>
+                <option value="€">€ EUR (Cents)</option>
+                <option value="£">£ GBP (Pence)</option>
+                <option value="¥">¥ JPY (Yen)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main App Content -->
+      <main class="main-content" id="calculator">
+        <section class="splitter-hero" aria-labelledby="heroTitle">
+          <div class="splitter-intro">
+            <div class="eyebrow"><span class="status-dot"></span> YOUR GROUP'S MONEY, IN SYNC</div>
+            <h2 id="heroTitle">Split bills.<br /><span class="gradient-text">Keep it fair.</span></h2>
+            <p>Enter the total, add your people, and get a clean, exact breakdown. No awkward math. No lost cents.</p>
+            <div class="hero-meta"><span class="meta-line"></span> FAST · FAIR · PRECISE</div>
+          </div>
+          <div class="engine-panel" aria-label="EquiSplit calculation engine status">
+            <div class="engine-panel-top"><span>LIVE / SPLIT ENGINE</span><span class="engine-live"><span class="status-dot"></span> READY</span></div>
+            <div class="engine-visual" aria-hidden="true">
+              <div class="engine-ring ring-outer"></div><div class="engine-ring ring-inner"></div>
+              <div class="engine-center">÷</div>
+              <span class="engine-node node-one">TOTAL</span><span class="engine-node node-two">PEOPLE</span><span class="engine-node node-three">SHARES</span>
+            </div>
+            <div class="engine-panel-foot"><span>PRECISION</span><strong>0.01 UNITS</strong><span class="engine-separator"></span><span>PROCESSING</span><strong>IN YOUR BROWSER</strong></div>
+          </div>
+        </section>
+
+        <div class="splitter-section-heading">
+          <div><span class="section-kicker">01 / CALCULATION CONSOLE</span><h2>Set up your split.</h2></div>
+          <span class="tool-label"><span class="status-dot"></span> PRIVATE BY DESIGN</span>
+        </div>
+        <div class="content-grid">
+          
+          <!-- LEFT CARD: Input Form -->
+          <section class="card form-card" aria-labelledby="formHeading">
+            <div class="card-header">
+              <h2 id="formHeading" class="card-title">Bill Details</h2>
+              <span class="card-subtitle">Zero rounding error distribution</span>
+            </div>
+
+            <!-- Global Error Announcement Banner -->
+            <div id="formAlertBanner" class="alert-banner hidden" role="alert" aria-live="polite">
+              <svg class="alert-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+              <div id="formAlertMessage" class="alert-text"></div>
+            </div>
+
+            <form id="billForm" novalidate>
+              <!-- Occasion Name -->
+              <div class="form-group">
+                <div class="label-row">
+                  <label for="occasionInput" class="form-label">Occasion / Event</label>
+                  <span class="label-hint">Optional (default: Friends Get-Together)</span>
+                </div>
+                <div class="input-wrapper">
+                  <span class="input-prefix-icon" aria-hidden="true">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                      <line x1="16" y1="2" x2="16" y2="6"></line>
+                      <line x1="8" y1="2" x2="8" y2="6"></line>
+                      <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                  </span>
+                  <input
+                    type="text"
+                    id="occasionInput"
+                    name="occasion"
+                    class="form-input has-prefix-icon"
+                    placeholder="e.g. Friday Dinner, Goa Trip, Office Lunch"
+                    maxlength="60"
+                    autocomplete="off"
+                  />
+                </div>
+              </div>
+
+              <!-- Total Bill Amount -->
+              <div class="form-group">
+                <div class="label-row">
+                  <label for="billAmountInput" class="form-label">
+                    Total Bill Amount <span class="required-star" aria-hidden="true">*</span>
+                  </label>
+                  <span class="label-hint">Up to 2 decimal places</span>
+                </div>
+                <div class="input-wrapper">
+                  <span id="currencyPrefix" class="input-prefix-currency" aria-hidden="true">₹</span>
+                  <input
+                    type="text"
+                    id="billAmountInput"
+                    name="billAmount"
+                    class="form-input has-prefix-currency font-tabular"
+                    placeholder="0.00"
+                    inputmode="decimal"
+                    autocomplete="off"
+                    required
+                    aria-describedby="billAmountError"
+                  />
+                </div>
+                <!-- Quick Amount Presets -->
+                <div class="quick-presets" aria-label="Quick amount increments">
+                  <button type="button" class="preset-btn" data-add="500">+500</button>
+                  <button type="button" class="preset-btn" data-add="1000">+1,000</button>
+                  <button type="button" class="preset-btn" data-add="2500">+2,500</button>
+                  <button type="button" class="preset-btn" id="clearBillBtn">Clear</button>
+                </div>
+                <div id="billAmountError" class="field-error hidden" role="alert"></div>
+              </div>
+
+              <!-- Number of People -->
+              <div class="form-group">
+                <div class="label-row">
+                  <label for="peopleCountInput" class="form-label">
+                    Number of People <span class="required-star" aria-hidden="true">*</span>
+                  </label>
+                  <span class="label-hint">Positive integer (&ge; 1)</span>
+                </div>
+                <div class="stepper-wrapper">
+                  <button
+                    type="button"
+                    id="decrementPeopleBtn"
+                    class="stepper-btn"
+                    aria-label="Decrease people count by 1"
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                  </button>
+                  <input
+                    type="text"
+                    id="peopleCountInput"
+                    name="peopleCount"
+                    class="form-input stepper-input font-tabular"
+                    placeholder="2"
+                    value="3"
+                    inputmode="numeric"
+                    autocomplete="off"
+                    required
+                    aria-describedby="peopleCountError"
+                  />
+                  <button
+                    type="button"
+                    id="incrementPeopleBtn"
+                    class="stepper-btn"
+                    aria-label="Increase people count by 1"
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="12" y1="5" x2="12" y2="19"></line>
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                  </button>
+                </div>
+                <!-- Quick People Counts -->
+                <div class="quick-presets" aria-label="Common group sizes">
+                  <span class="preset-label">Common:</span>
+                  <button type="button" class="preset-btn group-preset-btn" data-people="2">2</button>
+                  <button type="button" class="preset-btn group-preset-btn" data-people="3">3</button>
+                  <button type="button" class="preset-btn group-preset-btn" data-people="4">4</button>
+                  <button type="button" class="preset-btn group-preset-btn" data-people="5">5</button>
+                  <button type="button" class="preset-btn group-preset-btn" data-people="6">6</button>
+                  <button type="button" class="preset-btn group-preset-btn" data-people="8">8</button>
+                </div>
+                <div id="peopleCountError" class="field-error hidden" role="alert"></div>
+              </div>
+
+              <!-- Form Buttons -->
+              <div class="form-actions">
+                <button type="submit" id="splitBillBtn" class="btn btn-primary">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="2" x2="12" y2="22"></line>
+                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                  </svg>
+                  <span>Split Bill</span>
+                </button>
+                <button type="button" id="resetBtn" class="btn btn-secondary">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                    <path d="M3 3v5h5"></path>
+                  </svg>
+                  <span>Reset</span>
+                </button>
+              </div>
+            </form>
+          </section>
+
+          <!-- RIGHT CARD: Result & Breakdown -->
+          <section class="card results-card" aria-labelledby="resultsHeading">
+            
+            <!-- EMPTY / INITIAL STATE -->
+            <div id="emptyState" class="empty-state">
+              <div class="empty-state-icon" aria-hidden="true">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                  <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+              </div>
+              <h3 class="empty-state-title">No Calculation Yet</h3>
+              <p class="empty-state-desc">
+                Enter your bill amount and the number of people sharing to calculate an exact, penny-perfect split.
+              </p>
+              <div class="empty-state-hint">
+                <span class="info-dot" aria-hidden="true"></span>
+                <span>Calculates using integer minor units (paise/cents) to eliminate rounding errors.</span>
+              </div>
+            </div>
+
+            <!-- ACTIVE RESULTS VIEW (Hidden initially until valid split) -->
+            <div id="resultsView" class="results-view hidden">
+              
+              <!-- Result Header -->
+              <div class="results-top-bar">
+                <div>
+                  <span class="results-kicker">Split Calculation</span>
+                  <h2 id="resultsHeading" class="results-occasion-title">Dinner with Friends</h2>
+                  <div class="results-timestamp" id="calcTimestamp">Saved locally</div>
+                </div>
+                <div class="results-badge" id="remainderBadge">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  <span id="remainderBadgeText">Exact Even Split</span>
+                </div>
+              </div>
+
+              <!-- Primary Metrics Grid -->
+              <div class="metrics-grid">
+                <div class="metric-box">
+                  <span class="metric-label">Total Bill</span>
+                  <span class="metric-value font-tabular" id="displayTotalBill">₹0.00</span>
+                </div>
+                <div class="metric-box">
+                  <span class="metric-label">People Sharing</span>
+                  <span class="metric-value font-tabular" id="displayPeopleCount">0</span>
+                </div>
+                <div class="metric-box highlight-box">
+                  <span class="metric-label">Per-Person Share</span>
+                  <span class="metric-value metric-share font-tabular" id="displayPerPersonShare">₹0.00</span>
+                </div>
+              </div>
+
+              <!-- Mathematical Equality Verification Banner -->
+              <div class="exact-audit-banner">
+                <div class="audit-header">
+                  <div class="audit-icon-wrapper" aria-hidden="true">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                      <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                  </div>
+                  <span class="audit-title">Exact Mathematical Match</span>
+                  <span class="audit-pill font-tabular">100% Verified</span>
+                </div>
+                <p class="audit-formula font-tabular" id="auditFormulaText">
+                  Individual shares sum precisely to the total bill.
+                </p>
+                <div class="audit-remainder-note" id="remainderExplanation">
+                  <!-- Dynamic text injected by JS explaining how remainder units are balanced -->
+                </div>
+              </div>
+
+              <!-- Individual Breakdown Section -->
+              <div class="breakdown-section">
+                <div class="breakdown-header">
+                  <h3 class="breakdown-title">Individual Shares Breakdown</h3>
+                  <span class="breakdown-count font-tabular" id="participantCountTag">3 Participants</span>
+                </div>
+
+                <div class="participants-list" id="participantsList" role="list">
+                  <!-- Populated dynamically by script.js -->
+                </div>
+              </div>
+
+              <!-- Action Bar (Copy to Clipboard, Share) -->
+              <div class="results-actions">
+                <button type="button" id="copySummaryBtn" class="btn btn-secondary btn-full">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <span id="copyBtnText">Copy Shareable Summary</span>
+                </button>
+              </div>
+
+              <div id="copyFeedback" class="copy-feedback-banner hidden" role="status">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <span>Copied to clipboard! Ready to paste into WhatsApp, Telegram or SMS.</span>
+              </div>
+
+            </div>
+          </section>
+
+        </div>
+        <section class="guide-main" id="how-it-works" aria-labelledby="guideTitle">
+          <div class="guide-hero">
+            <span class="section-kicker">EQUISPLIT / THE METHOD</span>
+            <h2 id="guideTitle">Fair splits.<br /><span class="gradient-text">Down to the last paise.</span></h2>
+            <p>EquiSplit works out each share in your browser, keeps the arithmetic exact, and shows who owes what. No complicated setup—just enter a bill and your group size.</p>
+          </div>
+          <div class="guide-grid" aria-label="How bill splitting works">
+            <article class="guide-card">
+              <span class="guide-number">01 / INPUT</span>
+              <h2>Enter the details</h2>
+              <p>Add an optional occasion name, the total amount, and how many people are sharing. Choose your currency from the calculator.</p>
+            </article>
+            <article class="guide-card">
+              <span class="guide-number">02 / CALCULATE</span>
+              <h2>Divide without drift</h2>
+              <p>The total is converted to the currency's smallest units before division. That avoids floating-point rounding surprises.</p>
+            </article>
+            <article class="guide-card">
+              <span class="guide-number">03 / SETTLE</span>
+              <h2>Share the breakdown</h2>
+              <p>Each person gets a clearly listed share. Rename participants, mark payments, or copy a summary for your group chat.</p>
+            </article>
+          </div>
+          <div class="guide-equation" aria-label="One thousand rupees and one paisa split between three people totals exactly one thousand rupees and one paisa">
+            ₹1,000.01 = 2 × ₹333.34 + 1 × ₹333.33
+          </div>
+          <a class="btn btn-primary guide-cta" href="#calculator">Open the bill splitter <span aria-hidden="true">↑</span></a>
+        </section>
+      </main>
+
+      <!-- Clean Accessible Footer -->
+      <footer class="app-footer">
+        <p class="footer-text">
+          <span>EquiSplit Precision Engine</span>
+          <span class="sep" aria-hidden="true">&middot;</span>
+          <span>Exact to the last paise</span>
+          <span class="sep" aria-hidden="true">&middot;</span>
+          <span>Calculated in your browser</span>
+        </p>
+      </footer>
+    </div>
+
+    <!-- Vanilla Javascript (No external libraries or internet-dependent assets) -->
+    <script src="script.js" defer></script>
+  </body>
+</html>
